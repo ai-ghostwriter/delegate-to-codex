@@ -1,8 +1,8 @@
 # Delegate to Codex 🛰️
 
-> A [Claude Code Skill](https://docs.claude.com/en/docs/claude-code/skills) that
-> teaches Claude **when and how to hand work off to the Codex CLI** — to save
-> context, or to use a capability Claude doesn't have.
+> A [Claude Code plugin](https://docs.claude.com/en/docs/claude-code/plugins) (and
+> skill) that teaches Claude **when and how to hand work off to the Codex CLI** —
+> to save context, or to use a capability Claude doesn't have.
 
 *[🇮🇹 Versione italiana](README.it.md)*
 
@@ -18,10 +18,10 @@ Claude's context window for the thinking.
 - **A decision rule** for what to delegate vs. keep in Claude.
 - **The reliable invocation pattern** (`codex exec` via Bash) with a safe-by-default
   sandbox and an explicit, well-warned full-access mode.
-- **A capability map** ([`CAPABILITIES.md`](CAPABILITIES.md)) — domain → Codex
-  skill → ready-to-adapt example prompt.
-- **A real case study** ([`EXAMPLES_KDP.md`](EXAMPLES_KDP.md)) — Codex as a worker
-  in a publishing pipeline (Claude orchestrates, Codex renders).
+- **A capability map** ([`CAPABILITIES.md`](skills/delegate-to-codex/CAPABILITIES.md)) —
+  domain → Codex skill → ready-to-adapt example prompt.
+- **A real case study** ([`EXAMPLES_KDP.md`](skills/delegate-to-codex/EXAMPLES_KDP.md)) —
+  Codex as a worker in a publishing pipeline (Claude orchestrates, Codex renders).
 
 ## The core idea
 
@@ -33,7 +33,18 @@ Claude's context window for the thinking.
                                   bulk work)
 ```
 
-## Quick start
+## Install as a plugin
+
+Listed in the `codex-coprocessor` marketplace alongside the other Claude+Codex
+tools.
+
+```text
+# in Claude Code:
+/plugin marketplace add ai-ghostwriter/codex-coprocessor
+/plugin install delegate-to-codex@codex-coprocessor
+```
+
+## Quick start (the pattern)
 
 ```bash
 # Safe default: Codex can read/write inside the project only
@@ -45,8 +56,8 @@ codex exec \
 cat /tmp/result.txt
 ```
 
-See [`SKILL.md`](SKILL.md) for the full reference and
-[`CAPABILITIES.md`](CAPABILITIES.md) for what Codex can do.
+See [`SKILL.md`](skills/delegate-to-codex/SKILL.md) for the full reference and
+[`CAPABILITIES.md`](skills/delegate-to-codex/CAPABILITIES.md) for what Codex can do.
 
 ## ⚠️ Security note
 
@@ -64,35 +75,14 @@ deliberate escalation.
 - The Codex plugins/skills you intend to invoke, installed locally. The capability
   map describes a rich install; your mileage depends on what you've added.
 
-## Installing as a Claude Code skill
+## Manual install (skill only, no plugin)
 
-Claude Code discovers skills in your **central skills directory**,
-`~/.claude/skills/`. The folder name there must match the skill name
-(`delegate-to-codex`). Two ways to set it up:
-
-### Option A — Clone directly into the central skills directory
-
-Simplest. The repo *is* the installed skill.
+Claude Code also discovers loose skills in `~/.claude/skills/`. The folder name
+must match the skill name (`delegate-to-codex`).
 
 ```bash
-git clone https://github.com/ai-ghostwriter/delegate-to-codex.git \
-  ~/.claude/skills/delegate-to-codex
-```
-
-Update later with `git -C ~/.claude/skills/delegate-to-codex pull`.
-
-### Option B — Keep the repo separate, link it with a symlink
-
-Best if you keep all your skills/projects in one development folder and want the
-central directory to hold only links. Edit in one place, `git pull` in one place,
-and the symlink keeps `~/.claude/skills/` in sync.
-
-```bash
-# clone wherever you develop
 git clone https://github.com/ai-ghostwriter/delegate-to-codex.git ~/dev/delegate-to-codex
-
-# link it into the central skills directory
-ln -s ~/dev/delegate-to-codex ~/.claude/skills/delegate-to-codex
+ln -s ~/dev/delegate-to-codex/skills/delegate-to-codex ~/.claude/skills/delegate-to-codex
 ```
 
 Verify it resolves: `ls -l ~/.claude/skills/delegate-to-codex`.

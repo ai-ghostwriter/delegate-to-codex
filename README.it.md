@@ -1,8 +1,8 @@
 # Delegate to Codex 🛰️
 
-> Una [Claude Code Skill](https://docs.claude.com/en/docs/claude-code/skills) che
-> insegna a Claude **quando e come passare il lavoro al Codex CLI** — per
-> risparmiare contesto, o per usare una capacità che Claude non ha.
+> Un [plugin per Claude Code](https://docs.claude.com/en/docs/claude-code/plugins)
+> (e skill) che insegna a Claude **quando e come passare il lavoro al Codex CLI** —
+> per risparmiare contesto, o per usare una capacità che Claude non ha.
 
 *[🇬🇧 English version](README.md)*
 
@@ -19,10 +19,10 @@ ragionamento.
 - **Una regola decisionale** su cosa delegare vs cosa tenere in Claude.
 - **Il pattern di invocazione affidabile** (`codex exec` via Bash) con sandbox
   sicura di default e una modalità full-access esplicita e ben avvisata.
-- **Una capability map** ([`CAPABILITIES.md`](CAPABILITIES.md)) — dominio → skill
-  Codex → prompt d'esempio pronto da adattare.
-- **Un caso reale** ([`EXAMPLES_KDP.md`](EXAMPLES_KDP.md)) — Codex come worker in
-  una pipeline editoriale (Claude orchestra, Codex renderizza).
+- **Una capability map** ([`CAPABILITIES.md`](skills/delegate-to-codex/CAPABILITIES.md)) —
+  dominio → skill Codex → prompt d'esempio pronto da adattare.
+- **Un caso reale** ([`EXAMPLES_KDP.md`](skills/delegate-to-codex/EXAMPLES_KDP.md)) —
+  Codex come worker in una pipeline editoriale (Claude orchestra, Codex renderizza).
 
 ## L'idea di fondo
 
@@ -34,7 +34,18 @@ ragionamento.
                                lavoro bulk)
 ```
 
-## Avvio rapido
+## Installazione come plugin
+
+Elencato nella marketplace `codex-coprocessor` insieme agli altri strumenti
+Claude+Codex.
+
+```text
+# dentro Claude Code:
+/plugin marketplace add ai-ghostwriter/codex-coprocessor
+/plugin install delegate-to-codex@codex-coprocessor
+```
+
+## Avvio rapido (il pattern)
 
 ```bash
 # Default sicuro: Codex può leggere/scrivere solo dentro il progetto
@@ -46,8 +57,8 @@ codex exec \
 cat /tmp/result.txt
 ```
 
-Vedi [`SKILL.md`](SKILL.md) per il riferimento completo e
-[`CAPABILITIES.md`](CAPABILITIES.md) per cosa sa fare Codex.
+Vedi [`SKILL.md`](skills/delegate-to-codex/SKILL.md) per il riferimento completo e
+[`CAPABILITIES.md`](skills/delegate-to-codex/CAPABILITIES.md) per cosa sa fare Codex.
 
 ## ⚠️ Nota di sicurezza
 
@@ -66,41 +77,17 @@ un'escalation deliberata.
   map descrive un'installazione ricca; ciò che funziona dipende da cosa hai
   aggiunto.
 
-## Installazione come skill di Claude Code
+## Installazione manuale (solo skill, senza plugin)
 
-Claude Code scopre le skill nella tua **directory skill centrale**,
-`~/.claude/skills/`. Lì il nome della cartella deve combaciare col nome della
-skill (`delegate-to-codex`). Due modi per configurarla:
-
-### Opzione A — Clona direttamente nella directory skill centrale
-
-Il più semplice. Il repo *è* la skill installata.
+Claude Code scopre anche le skill sciolte in `~/.claude/skills/`. Il nome della
+cartella deve combaciare col nome della skill (`delegate-to-codex`).
 
 ```bash
-git clone https://github.com/ai-ghostwriter/delegate-to-codex.git \
-  ~/.claude/skills/delegate-to-codex
-```
-
-Aggiorni in seguito con `git -C ~/.claude/skills/delegate-to-codex pull`.
-
-### Opzione B — Tieni il repo separato e collegalo con un symlink
-
-Ideale se tieni tutte le skill/progetti in un'unica cartella di sviluppo e vuoi
-che la directory centrale contenga solo link. Modifichi in un posto, fai
-`git pull` in un posto, e il symlink mantiene `~/.claude/skills/` allineata.
-
-```bash
-# clona dove sviluppi
 git clone https://github.com/ai-ghostwriter/delegate-to-codex.git ~/dev/delegate-to-codex
-
-# collegalo nella directory skill centrale
-ln -s ~/dev/delegate-to-codex ~/.claude/skills/delegate-to-codex
+ln -s ~/dev/delegate-to-codex/skills/delegate-to-codex ~/.claude/skills/delegate-to-codex
 ```
 
 Verifica che risolva: `ls -l ~/.claude/skills/delegate-to-codex`.
-
-> 💡 Questa è esattamente la convenzione di `~/.claude/skills/` su questa macchina:
-> solo symlink che puntano alle skill mantenute in `Documents/Claude/SKILLS/`.
 
 ## Licenza
 
