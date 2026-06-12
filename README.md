@@ -1,91 +1,152 @@
-# Delegate to Codex 🛰️
+# Delegate to Codex
 
-> A [Claude Code plugin](https://docs.claude.com/en/docs/claude-code/plugins) (and
-> skill) that teaches Claude **when and how to hand work off to the Codex CLI** —
-> to save context, or to use a capability Claude doesn't have.
+*[Versione italiana](README.it.md)*
 
-*[🇮🇹 Versione italiana](README.it.md)*
+## What This Is
 
-Claude Code is great at judgment, routing and review. The [Codex
-CLI](https://github.com/openai/codex) is a separate agent with its own plugin
-ecosystem — image generation, Office file creation, browser automation, Google
-Workspace, Gmail, Canva, frontend scaffolding, and more. This skill lets Claude
-treat Codex as a **worker process**: offload the heavy or specialized task, keep
-Claude's context window for the thinking.
+Delegate to Codex is a Claude Code plugin and skill.
 
-## What it gives you
+In plain language: it teaches Claude Code when and how to ask the Codex CLI to do
+heavy or specialized work in a separate run.
 
-- **A decision rule** for what to delegate vs. keep in Claude.
-- **The reliable invocation pattern** (`codex exec` via Bash) with a safe-by-default
-  sandbox and an explicit, well-warned full-access mode.
-- **A capability map** ([`CAPABILITIES.md`](skills/delegate-to-codex/CAPABILITIES.md)) —
-  domain → Codex skill → ready-to-adapt example prompt.
-- **A real case study** ([`EXAMPLES_KDP.md`](skills/delegate-to-codex/EXAMPLES_KDP.md)) —
-  Codex as a worker in a publishing pipeline (Claude orchestrates, Codex renders).
+Use it when a task is large, repetitive, or needs Codex capabilities such as:
 
-## The core idea
+- generating or editing images
+- creating Word, Excel, or PowerPoint files
+- controlling a browser for screenshots, scraping, or local app testing
+- working with GitHub
+- working with Google Drive, Docs, Sheets, or Slides
+- reading or drafting Gmail messages
+- checking Google Calendar
+- creating or editing Canva designs
+- building or testing frontend apps
+- processing many files or doing token-heavy bulk work
 
+Claude Code remains the main assistant. Codex is the worker that Claude can call
+when the job is better suited to a separate command-line agent.
+
+## Requirements
+
+You need:
+
+- Claude Code installed.
+- Codex CLI installed.
+- Codex CLI logged in with:
+
+```bash
+codex login
 ```
-  Claude Code  ──delegates──►  codex exec  ──►  result file / artifact
-   (orchestrator,                (worker:           │
-    judgment, review)             generation,       ▼
-                                  rendering,    Claude reviews & routes
-                                  bulk work)
-```
 
-## Install as a plugin
+You can log in with a ChatGPT account. You do not need OpenAI API billing for
+the normal ChatGPT login flow.
 
-Listed in the `codex-coprocessor` marketplace alongside the other Claude+Codex
-tools.
+## Installation
+
+### Option 1: Install From The Claude Code Marketplace
+
+Type these commands inside the Claude Code chat box:
 
 ```text
-# in Claude Code:
 /plugin marketplace add ai-ghostwriter/codex-coprocessor
 /plugin install delegate-to-codex@codex-coprocessor
 ```
 
-## Quick start (the pattern)
+After installation, Claude Code can load the `/delegate-to-codex` skill when you
+mention it in a prompt.
+
+### Option 2: Manual Installation
+
+Clone the repository:
 
 ```bash
-# Safe default: Codex can read/write inside the project only
-codex exec \
-  --skip-git-repo-check --sandbox workspace-write \
-  -C /path/to/project -o /tmp/result.txt \
-  "Use the imagegen skill to generate a logo. Save as output/logo.png" < /dev/null
-
-cat /tmp/result.txt
+git clone https://github.com/ai-ghostwriter/delegate-to-codex.git /path/to/delegate-to-codex
 ```
 
-See [`SKILL.md`](skills/delegate-to-codex/SKILL.md) for the full reference and
-[`CAPABILITIES.md`](skills/delegate-to-codex/CAPABILITIES.md) for what Codex can do.
-
-## ⚠️ Security note
-
-This skill documents a `--dangerously-bypass-approvals-and-sandbox -s
-danger-full-access` mode that gives the agent full machine access and runs
-commands without approval. **Use it only on a machine you control, with prompts
-you trust — never on untrusted input or in CI with secrets.** The recommended
-default is `--sandbox workspace-write`, which confines Codex to the project
-directory. The skill leads with the safe option and treats full access as a
-deliberate escalation.
-
-## Requirements
-
-- [`codex`](https://github.com/openai/codex) CLI in PATH, authenticated (`codex login`)
-- The Codex plugins/skills you intend to invoke, installed locally. The capability
-  map describes a rich install; your mileage depends on what you've added.
-
-## Manual install (skill only, no plugin)
-
-Claude Code also discovers loose skills in `~/.claude/skills/`. The folder name
-must match the skill name (`delegate-to-codex`).
+Create the Claude Code skills folder if it does not exist:
 
 ```bash
-git clone https://github.com/ai-ghostwriter/delegate-to-codex.git ~/dev/delegate-to-codex
-ln -s ~/dev/delegate-to-codex/skills/delegate-to-codex ~/.claude/skills/delegate-to-codex
+mkdir -p ~/.claude/skills
 ```
 
-Verify it resolves: `ls -l ~/.claude/skills/delegate-to-codex`.
+Symlink the skill into Claude Code:
+
+```bash
+ln -s /path/to/delegate-to-codex/skills/delegate-to-codex ~/.claude/skills/delegate-to-codex
+```
+
+Check the symlink:
+
+```bash
+ls -l ~/.claude/skills/delegate-to-codex
+```
+
+## How To Use In Prompts
+
+You do not need to run Codex yourself.
+
+In your normal Claude Code chat message, include `/delegate-to-codex` and explain
+what you want done. The slash command is typed inside the chat box as part of
+your request.
+
+Copy-paste examples:
+
+```text
+Check these three folders and fix everything that is wrong. Have Codex do the
+heavy work, use /delegate-to-codex.
+```
+
+```text
+Generate the cover images for this book and save them in the output folder, use
+/delegate-to-codex.
+```
+
+```text
+Create a PowerPoint summary from this report and export the final .pptx file,
+use /delegate-to-codex.
+```
+
+Claude Code will decide whether delegation makes sense, prepare a Codex prompt,
+run `codex exec`, and then review the result.
+
+## What The Skill Teaches Claude
+
+The skill includes:
+
+- when to keep work in Claude Code
+- when to delegate work to Codex
+- how to run `codex exec` safely
+- how to ask Codex to write real files, not just final chat text
+- which Codex skills or plugins match common tasks
+
+Useful reference files:
+
+- [SKILL.md](skills/delegate-to-codex/SKILL.md)
+- [CAPABILITIES.md](skills/delegate-to-codex/CAPABILITIES.md)
+- [EXAMPLES_KDP.md](skills/delegate-to-codex/EXAMPLES_KDP.md)
+
+## Troubleshooting
+
+If Claude says Codex is not logged in, run this in your terminal:
+
+```bash
+codex login
+```
+
+If a `codex exec` command hangs, make sure the command ends with:
+
+```bash
+< /dev/null
+```
+
+That prevents Codex from waiting for more input.
+
+If Codex writes only a short final message instead of a file, ask Claude to tell
+Codex exactly where to write the file. The `--output-last-message` option saves
+only Codex's final chat message.
+
+If Codex cannot write outside the project folder, that is usually the safe
+sandbox doing its job. Full-machine access should be used only on trusted local
+tasks.
 
 ## License
 

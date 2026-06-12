@@ -1,7 +1,7 @@
 # Codex Capability Map
 
 Organized by domain. For each delegation, name the skill in the prompt so Codex
-activates the right tool. Example prompts are generic and ready to adapt —
+activates the right tool. Example prompts are generic and ready to adapt:
 replace paths and content with your own.
 
 > **Availability:** these capabilities come from Codex plugins/skills installed on
@@ -66,7 +66,7 @@ summarizing /path/to/report.md. Save as /tmp/report.pptx
 ---
 
 ## Browser automation
-**Plugin:** `browser-use` | **Skill:** `browser-use:browser`
+**Plugin:** `Browser` | **Skill:** `browser:control-in-app-browser`
 
 Open URLs in a real browser, click/type/scroll/fill forms, screenshot pages,
 scrape JS-rendered content, test local apps at `localhost:PORT`.

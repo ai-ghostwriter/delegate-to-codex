@@ -1,10 +1,9 @@
 {
   "name": "delegate-to-codex",
-  "description": "Teaches Claude Code when and how to offload work to the Codex CLI — heavy-token or bulk tasks, large-codebase analysis, plus capabilities Claude lacks (image generation, .docx/.xlsx/.pptx, browser automation, GitHub, Google Drive/Docs/Sheets, Gmail, Calendar, Canva, frontend).",
+  "description": "Teaches Claude Code when and how to offload work to the Codex CLI: heavy-token or bulk tasks, large-codebase analysis, plus capabilities Claude may not have such as image generation, Office files, browser automation, GitHub, Google Workspace, Gmail, Calendar, Canva, and frontend work.",
   "version": "0.2.0",
   "author": {
-    "name": "ai-ghostwriter",
-    "email": "ghostwriter.joker@gmail.com"
+    "name": "ai-ghostwriter"
   },
   "homepage": "https://github.com/ai-ghostwriter/delegate-to-codex",
   "repository": "https://github.com/ai-ghostwriter/delegate-to-codex",
