@@ -2,6 +2,18 @@
 
 *[English version](README.md)*
 
+## Indice
+
+- [Che Cos'è](#che-cosè)
+- [Requisiti](#requisiti)
+- [Installazione](#installazione)
+  - [Opzione 1: Installazione Dal Marketplace Claude Code](#opzione-1-installazione-dal-marketplace-claude-code)
+  - [Opzione 2: Installazione Manuale](#opzione-2-installazione-manuale)
+- [Come Usarla Nei Prompt](#come-usarla-nei-prompt)
+- [Cosa Insegna La Skill A Claude](#cosa-insegna-la-skill-a-claude)
+- [Risoluzione Problemi](#risoluzione-problemi)
+- [Licenza](#licenza)
+
 ## Che Cos'è
 
 Delegate to Codex è un plugin e una skill per Claude Code.
